@@ -8,9 +8,9 @@ class App extends React.Component {
 
     this.state = {
       monsters: [],
+      searchField: "",
     };
   }
-
   // fn is called when the App component is created in the DOM
   componentDidMount() {
     fetch("https://jsonplaceholder.typicode.com/users")
@@ -19,9 +19,23 @@ class App extends React.Component {
   }
 
   render() {
+    const { monsters, searchField } = this.state;
+    const filteredMonsters = monsters.filter((monster) => {
+      return monster.name.toLowerCase().includes(searchField.toLowerCase());
+    });
+
     return (
       <div className="App">
-        <CardList monsters={this.state.monsters}></CardList>
+        <input
+          type="search"
+          placeholder="search monsters"
+          onChange={(e) =>
+            this.setState({ searchField: e.target.value }, () =>
+              console.log(this.state.searchField)
+            )
+          }
+        />
+        <CardList monsters={filteredMonsters}></CardList>
       </div>
     );
   }
